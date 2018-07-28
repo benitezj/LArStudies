@@ -1,0 +1,41 @@
+package LArStudies
+author Jose Benitez (jose.benitez@cern.ch)
+
+use AtlasPolicy			AtlasPolicy-*
+use AtlasROOT			AtlasROOT-*           External
+use TrigSteeringEvent           TrigSteeringEvent-*   Trigger/TrigEvent
+use PyJobTransformsCore 	PyJobTransformsCore-* Tools
+use AthenaBaseComps             AthenaBaseComps-*     Control
+use TrigDecisionTool            TrigDecisionTool-*    Trigger/TrigAnalysis
+
+#macro_append ROOT_linkopts " -lGraf"
+
+apply_tag ROOTBasicLibs
+apply_tag ROOTGraphicsLibs
+apply_tag ROOTMathLibs
+
+apply_pattern dual_use_library files="*.cxx"
+
+apply_pattern declare_joboptions files="*.py"
+apply_pattern declare_python_modules files="*.py"
+
+branches python share src
+
+private
+use AtlasReflex			AtlasReflex-*	      External -no_auto_imports
+use GaudiInterface 		GaudiInterface-*      External
+use AthenaKernel 		AthenaKernel-* 	      Control
+use DataModel			DataModel-* 	      Control                       
+use SGTools 			SGTools-* 	      Control
+use StoreGate			StoreGate-* 	      Control
+use LArCafJobs 			LArCafJobs-*          LArCalorimeter
+
+
+apply_pattern declare_scripts files="../run/*.sh ../run/*.pl"
+
+apply_pattern lcgdict dict=LArStudies selectionfile=selection.xml headerfiles=" ../LArStudies/LArStudiesDict.h "
+
+apply_pattern declare_jobtransforms trfs='../share/RAWTransform_trf.py' jo='skeleton.RAWTransform.py'
+
+application mergeHist ../src/mergeHist.cxx
+macro_append mergeHist_dependencies " LArStudiesLib" 

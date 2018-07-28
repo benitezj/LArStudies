@@ -1,0 +1,6 @@
+<lcgdict>
+  <class name="LArSamples::NoiseTuple" />
+  <class name="LArSamples::NoiseTupleCoherent" />
+  <function name="findSamplesInDir" />
+
+</lcgdict>
